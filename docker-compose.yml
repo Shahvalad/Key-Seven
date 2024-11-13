@@ -1,0 +1,31 @@
+services:
+  postgres:
+    container_name: ms_postgres_sql
+    image: postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      PGDATA: /var/lib/postgresql/data
+      PGPORT: 5433
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5433:5433
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+
+  mail-dev:
+    container_name: ms_maildev
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres:
