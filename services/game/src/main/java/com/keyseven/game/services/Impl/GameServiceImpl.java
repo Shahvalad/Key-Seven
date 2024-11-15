@@ -4,14 +4,14 @@ import com.keyseven.game.clients.GenreClient;
 import com.keyseven.game.dtos.GameRequest;
 import com.keyseven.game.dtos.GameResponse;
 import com.keyseven.game.exceptions.GameNotFoundException;
+import com.keyseven.game.exceptions.GenreIdsEmptyException;
+import com.keyseven.game.exceptions.GenreNotFoundException;
 import com.keyseven.game.mappers.GameMapper;
 import com.keyseven.game.repositories.GameRepository;
 import com.keyseven.game.services.GameService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -44,15 +44,10 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Long createGame(GameRequest request) {
-        if (request.genreIds() == null || request.genreIds().isEmpty()) {
-            throw new IllegalArgumentException("At least one genre must be specified.");
-        }
-
         boolean genresExist = validateGenres(request.genreIds());
         if (!genresExist) {
-            throw new IllegalArgumentException("One or more genres do not exist.");
+            throw new GenreNotFoundException("One or more genres do not exist.");
         }
-
         var game = gameRepository.save(gameMapper.toGame(request));
         return game.getId();
     }
@@ -75,7 +70,7 @@ public class GameServiceImpl implements GameService {
 
     private boolean validateGenres(List<Long> genreIds) {
         if (genreIds == null || genreIds.isEmpty()) {
-            throw new IllegalArgumentException("Genre IDs cannot be null or empty.");
+            throw new GenreIdsEmptyException("Genre IDs cannot be null or empty.");
         }
         return genreClient.checkGenresExist(genreIds);
     }

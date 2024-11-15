@@ -1,8 +1,6 @@
 package com.keyseven.game.Handlers;
 
-import com.keyseven.game.exceptions.ErrorResponse;
-import com.keyseven.game.exceptions.GameAlreadyExistsException;
-import com.keyseven.game.exceptions.GameNotFoundException;
+import com.keyseven.game.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,6 +19,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGameAlreadyExistsException(GameAlreadyExistsException e) {
         ErrorResponse errorResponse = new ErrorResponse("Game Already Exists", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(GenreIdsEmptyException.class)
+    public ResponseEntity<ErrorResponse> handleGenreIdsEmptyException(GenreIdsEmptyException e) {
+        ErrorResponse errorResponse = new ErrorResponse("Genre Ids Empty", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGenreNotFoundException(GenreNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse("Genre Not Found", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
