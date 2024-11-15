@@ -8,8 +8,6 @@ import com.keyseven.genre.mappers.GenreMapper;
 import com.keyseven.genre.repositories.GenreRepository;
 import com.keyseven.genre.services.GenreService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class GenreServiceImpl implements GenreService {
-
-    private final KafkaTemplate<String, GenreResponse> kafkaTemplate;
-    private static final String TOPIC = "genre-events";
 
     private final GenreRepository genreRepository;
     private final GenreMapper genreMapper;
@@ -47,7 +42,6 @@ public class GenreServiceImpl implements GenreService {
                     throw new GenreAlreadyExistsException("Genre with name '" + request.name() + "' already exists.");
                 });
         var genre = genreRepository.save(genreMapper.toEntity(request));
-        kafkaTemplate.send(TOPIC, genreMapper.toResponse(genre));
         return genre.getId();
     }
 
@@ -60,7 +54,6 @@ public class GenreServiceImpl implements GenreService {
             existingGenre.setGameIds(request.gameIds());
         }
         genreRepository.save(existingGenre);
-        kafkaTemplate.send(TOPIC, genreMapper.toResponse(existingGenre));
     }
 
     @Override
@@ -68,6 +61,15 @@ public class GenreServiceImpl implements GenreService {
         var existingGenre = genreRepository.findById(id)
                 .orElseThrow(()-> new GenreNotFoundException("Genre not found"));
         genreRepository.delete(existingGenre);
-        kafkaTemplate.send(TOPIC, genreMapper.toResponse(existingGenre));
     }
+
+    @Override
+    public boolean doGenresExist(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("Genre IDs cannot be null or empty");
+        }
+        return genreRepository.countByIdIn(ids) == ids.size();
+    }
+
+
 }

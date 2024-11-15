@@ -2,7 +2,6 @@ package com.keyseven.game.services;
 
 import com.keyseven.game.dtos.GameRequest;
 import com.keyseven.game.dtos.GameResponse;
-import com.keyseven.game.entities.Game;
 
 import java.util.List;
 

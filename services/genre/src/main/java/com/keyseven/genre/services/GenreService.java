@@ -11,4 +11,5 @@ public interface GenreService {
     Long createGenre(GenreRequest request);
     void updateGenre(Long id, GenreRequest request);
     void deleteGenre(Long id);
+    boolean doGenresExist(List<Long> ids);
 }

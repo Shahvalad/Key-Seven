@@ -1,20 +1,17 @@
 package com.keyseven.game.services.Impl;
 
+import com.keyseven.game.clients.GenreClient;
 import com.keyseven.game.dtos.GameRequest;
 import com.keyseven.game.dtos.GameResponse;
-import com.keyseven.game.dtos.GenreResponse;
 import com.keyseven.game.exceptions.GameNotFoundException;
 import com.keyseven.game.mappers.GameMapper;
 import com.keyseven.game.repositories.GameRepository;
 import com.keyseven.game.services.GameService;
-import com.keyseven.game.services.Impl.GenreCacheService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -23,21 +20,11 @@ import java.util.List;
 @Transactional
 public class GameServiceImpl implements GameService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class); // Logger instance
 
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
-    private final KafkaTemplate<String, GameResponse> kafkaTemplate;
-    private final GenreCacheService genreCacheService; // Inject GenreCacheService
+    private final GenreClient genreClient;
 
-    private static final String GAME_TOPIC = "game-events";
-
-    // Listen for genre events to update the cache of genre IDs
-    @KafkaListener(topics = "genre-events", groupId = "game-service")
-    public void listen(GenreResponse genreResponse) {
-        logger.debug("Received GenreResponse: {}", genreResponse); // Log the received GenreResponse
-        genreCacheService.addGenreToCache(genreResponse); // Assuming you have an addGenreToCache method
-    }
 
     @Override
     public List<GameResponse> getAllGames() {
@@ -54,16 +41,22 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + id));
     }
 
+
     @Override
     public Long createGame(GameRequest request) {
-        if (request.genreIds().stream().anyMatch(id -> !genreCacheService.genreExists(id))) {
+        if (request.genreIds() == null || request.genreIds().isEmpty()) {
+            throw new IllegalArgumentException("At least one genre must be specified.");
+        }
+
+        boolean genresExist = validateGenres(request.genreIds());
+        if (!genresExist) {
             throw new IllegalArgumentException("One or more genres do not exist.");
         }
 
         var game = gameRepository.save(gameMapper.toGame(request));
-        kafkaTemplate.send(GAME_TOPIC, gameMapper.toGameResponse(game));
         return game.getId();
     }
+
 
     @Override
     public void updateGameById(Long id, GameRequest gameRequest) {
@@ -78,5 +71,12 @@ public class GameServiceImpl implements GameService {
         var existingGame = gameRepository.findById(id)
                 .orElseThrow(() -> new GameNotFoundException("Game not found with id: " + id));
         gameRepository.delete(existingGame);
+    }
+
+    private boolean validateGenres(List<Long> genreIds) {
+        if (genreIds == null || genreIds.isEmpty()) {
+            throw new IllegalArgumentException("Genre IDs cannot be null or empty.");
+        }
+        return genreClient.checkGenresExist(genreIds);
     }
 }

@@ -42,4 +42,10 @@ public class GenreController {
         genreService.deleteGenre(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/exists")
+    public ResponseEntity<Boolean> checkGenresExist(@RequestBody List<Long> ids) {
+        boolean allExist = genreService.doGenresExist(ids);
+        return ResponseEntity.ok(allExist);
+    }
 }
