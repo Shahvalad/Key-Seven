@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.keyseven</groupId>
-	<artifactId>game</artifactId>
+	<artifactId>genre</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>game</name>
-	<description>Game Service</description>
+	<name>genre</name>
+	<description>Genre Service</description>
 	<url/>
 	<licenses>
 		<license/>

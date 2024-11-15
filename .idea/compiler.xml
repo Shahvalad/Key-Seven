@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="genre" />
         <module name="config-server" />
-        <module name="discovery" />
         <module name="game" />
+        <module name="discovery" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,6 +19,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="game" options="-parameters" />
+      <module name="genre" options="-parameters" />
     </option>
   </component>
 </project>
