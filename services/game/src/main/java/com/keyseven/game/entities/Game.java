@@ -25,8 +25,6 @@ public class Game {
     private String description;
 
     @ElementCollection
-    @CollectionTable(name = "game_genre", joinColumns = @JoinColumn(name = "game_id"))
-    @Column(name = "genre_id")
     private List<Long> genreIds;
 
     private Platform platform;

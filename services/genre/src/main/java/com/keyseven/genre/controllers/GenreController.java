@@ -48,4 +48,5 @@ public class GenreController {
         boolean allExist = genreService.doGenresExist(ids);
         return ResponseEntity.ok(allExist);
     }
+
 }

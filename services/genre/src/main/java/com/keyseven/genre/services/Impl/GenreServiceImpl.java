@@ -23,9 +23,10 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<GenreResponse> getAllGenres() {
-        return genreRepository.findAll()
+        return genreRepository.findByIsDeletedFalse()
                 .stream()
-                .map(genreMapper::toResponse).toList();
+                .map(genreMapper::toResponse)
+                .toList();
     }
 
     @Override
@@ -50,17 +51,15 @@ public class GenreServiceImpl implements GenreService {
         var existingGenre = genreRepository.findById(id)
                 .orElseThrow(()-> new GenreNotFoundException("Genre not found"));
         existingGenre.setName(request.name());
-        if(request.gameIds() != null){
-            existingGenre.setGameIds(request.gameIds());
-        }
         genreRepository.save(existingGenre);
     }
 
     @Override
     public void deleteGenre(Long id) {
         var existingGenre = genreRepository.findById(id)
-                .orElseThrow(()-> new GenreNotFoundException("Genre not found"));
-        genreRepository.delete(existingGenre);
+                .orElseThrow(() -> new GenreNotFoundException("Genre not found"));
+        existingGenre.setDeleted(true);
+        genreRepository.save(existingGenre);
     }
 
     @Override
@@ -68,8 +67,10 @@ public class GenreServiceImpl implements GenreService {
         if (ids == null || ids.isEmpty()) {
             throw new IllegalArgumentException("Genre IDs cannot be null or empty");
         }
-        return genreRepository.countByIdIn(ids) == ids.size();
+        long validGenresCount = genreRepository.countByIdInAndIsDeletedFalse(ids);
+        return validGenresCount == ids.size();
     }
+
 
 
 }

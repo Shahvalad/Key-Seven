@@ -46,7 +46,7 @@ public class GameServiceImpl implements GameService {
     public Long createGame(GameRequest request) {
         boolean genresExist = validateGenres(request.genreIds());
         if (!genresExist) {
-            throw new GenreNotFoundException("One or more genres do not exist.");
+            throw new GenreNotFoundException("One or more genres do not exist or are deleted.");
         }
         var game = gameRepository.save(gameMapper.toGame(request));
         return game.getId();

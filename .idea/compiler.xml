@@ -10,6 +10,7 @@
         <module name="genre" />
         <module name="config-server" />
         <module name="game" />
+        <module name="developer" />
         <module name="discovery" />
       </profile>
     </annotationProcessing>
@@ -17,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="config-server" options="-parameters" />
+      <module name="developer" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="game" options="-parameters" />
       <module name="genre" options="-parameters" />

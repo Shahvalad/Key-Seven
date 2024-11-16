@@ -11,15 +11,13 @@ public class GenreMapper {
     public GenreResponse toResponse(Genre genre) {
         return new GenreResponse(
                 genre.getId(),
-                genre.getName(),
-                genre.getGameIds()
+                genre.getName()
         );
     }
 
     public Genre toEntity(GenreRequest request) {
         return Genre.builder()
                 .name(request.name())
-                .gameIds(request.gameIds())
                 .build();
     }
 
