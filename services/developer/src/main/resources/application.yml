@@ -1,5 +1,5 @@
 spring:
   application:
     name: developer-service
-  datasource:
-    url: jdbc:postgresql://localhost:5433/developer
+  config:
+    import: optional:configserver:http://localhost:8888

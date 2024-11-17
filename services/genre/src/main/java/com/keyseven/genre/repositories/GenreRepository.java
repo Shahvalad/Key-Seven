@@ -17,5 +17,4 @@ public interface GenreRepository extends JpaRepository<Genre,Long> {
     long countByIdIn(List<Long> ids);
     List<Genre> findByIsDeletedFalse();
     Long countByIdInAndIsDeletedFalse(List<Long> ids);
-
 }

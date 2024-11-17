@@ -1,5 +1,6 @@
 package com.keyseven.game.services.Impl;
 
+import com.keyseven.game.clients.DeveloperClient;
 import com.keyseven.game.clients.GenreClient;
 import com.keyseven.game.dtos.GameRequest;
 import com.keyseven.game.dtos.GameResponse;
@@ -24,6 +25,7 @@ public class GameServiceImpl implements GameService {
     private final GameRepository gameRepository;
     private final GameMapper gameMapper;
     private final GenreClient genreClient;
+    private final DeveloperClient developerClient;
 
 
     @Override
@@ -45,8 +47,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public Long createGame(GameRequest request) {
         boolean genresExist = validateGenres(request.genreIds());
+        boolean developerExist = developerClient.isDeveloperExist(request.developerId());
         if (!genresExist) {
             throw new GenreNotFoundException("One or more genres do not exist or are deleted.");
+        }
+        if (!developerExist) {
+            throw new RuntimeException("Developer does not exist or is deleted.");
         }
         var game = gameRepository.save(gameMapper.toGame(request));
         return game.getId();
