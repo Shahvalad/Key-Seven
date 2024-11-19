@@ -18,24 +18,16 @@ public class Game {
     @Id
     @GeneratedValue
     private Long id;
-
     @NotNull
     private String name;
-
     private String description;
-
-    @ElementCollection
-    private List<Long> genreIds;
-
     private Platform platform;
-
     @NotNull
     private BigDecimal price;
-
     private String imageUrl;
-
     private LocalDateTime releaseDate;
-
+    @ElementCollection
+    private List<Long> genreIds;
     private Long developerId;
     private Long publisherId;
 }

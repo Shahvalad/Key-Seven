@@ -2,11 +2,10 @@ package com.keyseven.game.services.Impl;
 
 import com.keyseven.game.clients.DeveloperClient;
 import com.keyseven.game.clients.GenreClient;
+import com.keyseven.game.clients.PublisherClient;
 import com.keyseven.game.dtos.GameRequest;
 import com.keyseven.game.dtos.GameResponse;
-import com.keyseven.game.exceptions.GameNotFoundException;
-import com.keyseven.game.exceptions.GenreIdsEmptyException;
-import com.keyseven.game.exceptions.GenreNotFoundException;
+import com.keyseven.game.exceptions.*;
 import com.keyseven.game.mappers.GameMapper;
 import com.keyseven.game.repositories.GameRepository;
 import com.keyseven.game.services.GameService;
@@ -26,6 +25,7 @@ public class GameServiceImpl implements GameService {
     private final GameMapper gameMapper;
     private final GenreClient genreClient;
     private final DeveloperClient developerClient;
+    private final PublisherClient publisherClient;
 
 
     @Override
@@ -48,11 +48,15 @@ public class GameServiceImpl implements GameService {
     public Long createGame(GameRequest request) {
         boolean genresExist = validateGenres(request.genreIds());
         boolean developerExist = developerClient.isDeveloperExist(request.developerId());
+        boolean publisherExist = publisherClient.isPublisherExist(request.publisherId());
         if (!genresExist) {
             throw new GenreNotFoundException("One or more genres do not exist or are deleted.");
         }
         if (!developerExist) {
-            throw new RuntimeException("Developer does not exist or is deleted.");
+            throw new DeveloperNotFoundException("Developer does not exist or is deleted.");
+        }
+        if(!publisherExist){
+            throw new PublisherNotFoundException("Publisher does not exist or is deleted.");
         }
         var game = gameRepository.save(gameMapper.toGame(request));
         return game.getId();

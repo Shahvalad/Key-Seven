@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="genre" />
         <module name="config-server" />
+        <module name="publisher" />
         <module name="game" />
         <module name="developer" />
         <module name="discovery" />
@@ -22,6 +23,7 @@
       <module name="discovery" options="-parameters" />
       <module name="game" options="-parameters" />
       <module name="genre" options="-parameters" />
+      <module name="publisher" options="-parameters" />
     </option>
   </component>
 </project>

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/game
+    url: jdbc:postgresql://localhost:5433/publisher
     username: shavalad
     password: asdfg456
     driver-class-name: org.postgresql.Driver
@@ -9,12 +9,6 @@ spring:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-server:
-  port: 8050
 
-genre-service:
-  url: http://localhost:8060
-publisher-service:
-    url: http://localhost:8090
-developer-service:
-    url: http://localhost:8070
+server:
+  port: 8090

@@ -1,4 +1,4 @@
-package com.keyseven.game.Handlers;
+package com.keyseven.game.handlers;
 
 import com.keyseven.game.exceptions.*;
 import org.springframework.http.HttpStatus;
