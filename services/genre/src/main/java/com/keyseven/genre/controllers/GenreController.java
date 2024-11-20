@@ -28,7 +28,7 @@ public class GenreController {
 
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody @Valid GenreRequest request){
-        return ResponseEntity.ok(genreService.createGenre(request));
+        return ResponseEntity.ok(genreService.createGenre(request)); //TODO: Change this to return a URI
     }
 
     @PutMapping({"/{id}"})

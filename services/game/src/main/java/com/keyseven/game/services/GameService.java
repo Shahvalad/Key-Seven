@@ -11,4 +11,5 @@ public interface GameService {
     GameResponse getGameById(Long id);
     void updateGameById(Long id, GameRequest gameRequest);
     void deleteGameById(Long id);
+    boolean gameExists(Long id);
 }

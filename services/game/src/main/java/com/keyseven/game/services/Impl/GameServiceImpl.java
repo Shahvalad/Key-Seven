@@ -78,6 +78,11 @@ public class GameServiceImpl implements GameService {
         gameRepository.delete(existingGame);
     }
 
+    @Override
+    public boolean gameExists(Long id) {
+        return gameRepository.existsById(id);
+    }
+
     private boolean validateGenres(List<Long> genreIds) {
         if (genreIds == null || genreIds.isEmpty()) {
             throw new GenreIdsEmptyException("Genre IDs cannot be null or empty.");

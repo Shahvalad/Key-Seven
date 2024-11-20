@@ -28,7 +28,7 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<Long> createGame(@RequestBody @Valid GameRequest request){
-        return ResponseEntity.ok(gameService.createGame(request));
+        return ResponseEntity.ok(gameService.createGame(request)); // TODO: Change this to uri
     }
 
     @PutMapping({"/{id}"})
@@ -41,5 +41,10 @@ public class GameController {
     public ResponseEntity<Void> deleteGame(@PathVariable Long id){
         gameService.deleteGameById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping({"/exists/{id}"})
+    public ResponseEntity<Boolean> exists(@PathVariable Long id){
+        return ResponseEntity.ok(gameService.gameExists(id));
     }
 }

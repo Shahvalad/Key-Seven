@@ -33,7 +33,7 @@ public class DeveloperController {
 
     @PostMapping
     public ResponseEntity<Long> createDeveloper(@RequestBody @Valid DeveloperRequest developerRequest) {
-        return ResponseEntity.ok(developerService.createDeveloper(developerRequest));
+        return ResponseEntity.ok(developerService.createDeveloper(developerRequest)); // TODO: Change this to return a URI
     }
 
     @PutMapping("/{id}")
