@@ -5,14 +5,14 @@ services:
     container_name: ms_postgres_sql
     image: postgres
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_USER: shavalad
+      POSTGRES_PASSWORD: asdfg456
       PGDATA: /var/lib/postgresql/data
       PGPORT: 5433
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - 5433:5433
+      - "5433:5433"
     networks:
       - microservices-net
     restart: unless-stopped
@@ -26,37 +26,27 @@ services:
     networks:
       - microservices-net
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: ms_keycloak
     environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: adminpassword
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5433/keycloak
+      KC_DB_USERNAME: shavalad
+      KC_DB_PASSWORD: asdfg456
     ports:
-      - "22181:2181"
-    networks:
-      - microservices-net
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: ms_kafka
-    ports:
-      - "9092:9092"
+      - "8181:8080"
     depends_on:
-      - zookeeper
-    environment:
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      - postgres
     networks:
       - microservices-net
+    command: start-dev
+
+volumes:
+  postgres:
 
 networks:
   microservices-net:
     driver: bridge
-
-volumes:
-  postgres:

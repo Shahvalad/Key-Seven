@@ -7,14 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="genre" />
         <module name="config-server" />
-        <module name="publisher" />
         <module name="game" />
-        <module name="developer" />
         <module name="discovery" />
+        <module name="genre" />
+        <module name="publisher" />
+        <module name="developer" />
+        <module name="inventory" />
+        <module name="gateway" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="user" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -22,8 +27,11 @@
       <module name="developer" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="game" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="genre" options="-parameters" />
+      <module name="inventory" options="-parameters" />
       <module name="publisher" options="-parameters" />
+      <module name="user" options="-parameters" />
     </option>
   </component>
 </project>

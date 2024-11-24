@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: game-service
+          uri: lb:http://GAME-SERVICE
+          predicates:
+            - Path=/api/v1/games/**
+        - id: genre-service
+          uri: lb:http://GENRE-SERVICE
+          predicates:
+            - Path=/api/v1/genres/**
+        - id: developer-service
+          uri: lb:http://DEVELOPER-SERVICE
+          predicates:
+            - Path=/api/v1/developers/**
+        - id: publisher-service
+          uri: lb:http://PUBLISHER-SERVICE
+          predicates:
+            - Path=/api/v1/publishers/**
+        - id: inventory-service
+          uri: lb:http://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/v1/inventory/game-keys/**
+server:
+  port: 8080
+
+
