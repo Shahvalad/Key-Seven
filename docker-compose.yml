@@ -30,16 +30,10 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: ms_keycloak
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: adminpassword
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5433/keycloak
-      KC_DB_USERNAME: shavalad
-      KC_DB_PASSWORD: asdfg456
+      KEYCLOAK_ADMIN: shahvalad
+      KEYCLOAK_ADMIN_PASSWORD: asdfg456!
     ports:
       - "8181:8080"
-    depends_on:
-      - postgres
     networks:
       - microservices-net
     command: start-dev
