@@ -33,13 +33,13 @@ public class GameKeyController {
         return ResponseEntity.ok(gameKeyService.findByGameId(gameId));
     }
 
-    @PatchMapping("/redeem/{id}")
+    @PostMapping("/redeem/{id}")
     public ResponseEntity<Void> redeem(@PathVariable Long id) {
         gameKeyService.redeem(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Long> create(@Valid @RequestBody GameKeyRequest gameKeyRequest) {
         Long createdId = gameKeyService.create(gameKeyRequest);
         return ResponseEntity.created(URI.create("/api/v1/inventory/game-keys/" + createdId)).body(createdId);

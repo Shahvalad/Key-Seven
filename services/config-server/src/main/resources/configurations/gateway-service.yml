@@ -25,6 +25,10 @@ spring:
           uri: lb:http://INVENTORY-SERVICE
           predicates:
             - Path=/api/v1/inventory/game-keys/**
+        - id: discovery-service
+          uri: lb:http://DISCOVERY-SERVICE
+          predicates:
+            - Path=/eureka/**
 server:
   port: 8080
 
